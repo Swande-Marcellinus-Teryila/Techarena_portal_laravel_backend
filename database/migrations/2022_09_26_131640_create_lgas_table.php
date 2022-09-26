@@ -15,6 +15,8 @@ return new class extends Migration
     {
         Schema::create('lgas', function (Blueprint $table) {
             $table->id();
+            $table->string('lga_name');
+            $table->foreignId('state_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

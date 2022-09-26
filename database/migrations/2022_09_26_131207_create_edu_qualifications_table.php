@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('edu_qualifications', function (Blueprint $table) {
             $table->id();
+            $table->string('qualification');
             $table->timestamps();
         });
     }

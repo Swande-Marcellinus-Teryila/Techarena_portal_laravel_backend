@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('course_durations', function (Blueprint $table) {
             $table->id();
+            $table->integer('months');
             $table->timestamps();
         });
     }
