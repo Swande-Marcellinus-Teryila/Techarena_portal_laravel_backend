@@ -8,4 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class CourseDuration extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'months',
+    ];
+
+    public $timestamps = true;
+
+    function courseprice(){
+        return $this->hasMany(courseprice::class);
+    }
+
 }

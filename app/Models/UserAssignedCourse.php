@@ -5,16 +5,22 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CoursePrice extends Model
+class UserAssignedCourse extends Model
 {
     use HasFactory;
+
     protected $fillable = [
-        'cost',
+        'user_id',
         'department_id',
         'course_id'
     ];
+
     public $timestamps = true;
 
+    function user()
+    {
+        return $this->belongsTo(User::class);
+    }
     function department()
     {
         return $this->belongsTo(Department::class);

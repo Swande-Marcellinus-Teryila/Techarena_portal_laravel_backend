@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('scholarship_courses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('department_id')->constrained()->onDelete('cascade');
-            $table->foreignId('course_course_id')->constrained()->onDelete('cascade');
+            $table->foreignId('course_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

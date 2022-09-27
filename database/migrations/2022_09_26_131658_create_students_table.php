@@ -22,9 +22,7 @@ return new class extends Migration
             $table->string('phone');
             $table->string('whatsapp_no');
             $table->string('email');
-            $table->string('residential_address');
-            $table->string('is_computer_knowledgeable');
-            $table->string('is_certificate_needed');
+            $table->integer('residential_address');
             $table->string('pri_sch_attended');
             $table->string('sec_sch_attended');
             $table->string('guidiance_name');
@@ -39,6 +37,11 @@ return new class extends Migration
             $table->foreignId('lga_id')->constrained();
             $table->foreignId('edu_qualification_id')->constrained();
             $table->foreignId('employment_status_id')->constrained();
+            $table->integer('is_computer_knowledgeable')->default(0);
+            $table->integer('is_certificate_needed')->default(1);
+            $table->integer('is_approved')->default(0);
+            $table->integer('is_duration_over')->default(0);
+            $table->integer('status')->default(0);
             $table->timestamps();
         });
     }

@@ -5,21 +5,30 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class EduQualification extends Model
+class ScholarshipCourses extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'qualification',
-    ];
+        'department_id',
+        'course_id'
+        ];
     public $timestamps = true;
 
-    function student()
+    function department()
     {
-        return $this->hasMany(Student::class);
+        return $this->belongsTo(Department::class);
+    }
+    
+    function course()
+    {
+        return $this->belongsTo(Course::class);
     }
 
     function scholarshipStudent()
     {
         return $this->hasMany(ScholarshipStudent::class);
     }
+
+
+
 }

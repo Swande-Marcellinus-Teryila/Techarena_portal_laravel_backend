@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class product extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'product_name', 
+        'photo'
+        ];
+    public $timestamps = true;
 }
