@@ -5,23 +5,31 @@ namespace App\Http\Controllers;
 use App\Models\Course;
 use Illuminate\Http\Request;
 
+use function PHPUnit\Framework\isEmpty;
+
 class CourseController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
-        //
+        try {
+
+            $course = Course::all();
+            if (count($course) > 0) {
+                return response()->json($course);
+            } else {
+                return response()->json([
+                    'message' => "No record found",
+                ]);
+            }
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'Sorry, something went wrong',
+            ]);
+        }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create()
     {
         //
@@ -78,8 +86,24 @@ class CourseController extends Controller
      * @param  \App\Models\Course  $course
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Course $course)
+    public function destroy($id)
     {
-        //
+        try {
+            $course = Course::find($id);
+        if ($course) {
+            $course->delete();
+            return response()->json([
+                'message' => "Record deleted successfully"
+            ]);
+        }else{
+            return response()->json([
+                'message' => "Record  not found"
+            ]);
+        }
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => "Sorry,somthing went wrong"
+            ]);
+        }
     }
 }

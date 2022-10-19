@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Department;
+use App\Models\Role;
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
-class DepartmentController extends Controller
+class RoleController extends Controller
 {
-
     public function index()
     {
         try {
 
-            $departments= Department::all();
-            if (count($departments) > 0) {
-                return response()->json($departments);
+            $roles = Role::all();
+            if (count($roles) > 0) {
+                return response()->json($roles);
             } else {
                 return response()->json([
                     'message' => "No record found",
@@ -34,27 +35,48 @@ class DepartmentController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+   
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'role_name' => 'required',
+            'role_description' => 'required'
+        ]);
+        $roles = [
+            'role_name' => $request->role_name,
+            'role_description' => $request->role_description,
+        ];
+        $role = $request->role_name;
+        try {
+            $count_record =Role::where('role_name','=',$role)->first();
+            if ($count_record == 0) {
+                DB::table('roles')->insert($roles);
+                return response()->json([
+                    'message' => 'Record added successfully'
+                ]);
+            } else {
+                return response()->json([
+                    'message' => $role.' already exist!'
+                ], 500);
+            }
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $role . ' al'
+            ], 500);
+        }
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Department  $department
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Department $department)
+    public function show($id)
     {
         //
     }
@@ -62,10 +84,10 @@ class DepartmentController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Department  $department
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Department $department)
+    public function edit($id)
     {
         //
     }
@@ -74,10 +96,10 @@ class DepartmentController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Department  $department
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Department $department)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -85,17 +107,17 @@ class DepartmentController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Department  $department
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
         try {
-            $departments = Department::find($id);
-            if ($departments) {
-                $departments->delete();
+            $roles = Role::WhereIn('id',explode(',',$id));
+            if ($roles) {
+                $roles->delete();
                 return response()->json([
-                    'message' => "Record deleted successfully"
+                    'message' => "Record(s) deleted successfully"
                 ]);
             } else {
                 return response()->json([

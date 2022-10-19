@@ -7,16 +7,24 @@ use Illuminate\Http\Request;
 
 class ScholarshipStudentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
-    }
+        try {
 
+            $scholarship_students = ScholarshipStudent::all();
+            if (count($scholarship_students) > 0) {
+                return response()->json($scholarship_students);
+            } else {
+                return response()->json([
+                    'message' => "No record found",
+                ]);
+            }
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'Sorry, something went wrong',
+            ]);
+        }
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -72,14 +80,24 @@ class ScholarshipStudentController extends Controller
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\ScholarshipStudent  $scholarshipStudent
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(ScholarshipStudent $scholarshipStudent)
+    public function destroy($id)
     {
-        //
+        try {
+            $scholarship_students = ScholarshipStudent::find($id);
+            if ($scholarship_students) {
+                $scholarship_students->delete();
+                return response()->json([
+                    'message' => "Record deleted successfully"
+                ]);
+            } else {
+                return response()->json([
+                    'message' => "Record does not exist"
+                ]);
+            }
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => "Sorry,somthing went wrong"
+            ]);
+        }
     }
 }

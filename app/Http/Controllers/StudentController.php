@@ -7,16 +7,24 @@ use Illuminate\Http\Request;
 
 class StudentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
-    }
+        try {
 
+            $students= Student::all();
+            if (count($students) > 0) {
+                return response()->json($students);
+            } else {
+                return response()->json([
+                    'message' => "No record found",
+                ]);
+            }
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'Sorry, something went wrong',
+            ]);
+        }
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -72,14 +80,24 @@ class StudentController extends Controller
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Student  $student
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Student $student)
+    public function destroy($id)
     {
-        //
+        try {
+            $students = Student::find($id);
+            if ($students) {
+                $students->delete();
+                return response()->json([
+                    'message' => "Record deleted successfully"
+                ]);
+            } else {
+                return response()->json([
+                    'message' => "Record does not exist"
+                ]);
+            }
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => "Sorry,somthing went wrong"
+            ]);
+        }
     }
 }

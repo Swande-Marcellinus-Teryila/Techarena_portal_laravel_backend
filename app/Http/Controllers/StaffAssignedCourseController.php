@@ -2,21 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CoursePrice;
+use App\Models\StaffAssignedCourse;
 use Illuminate\Http\Request;
 
-use function PHPUnit\Framework\isEmpty;
-
-class CoursePriceController extends Controller
+class StaffAssignedCourseController extends Controller
 {
-
     public function index()
     {
         try {
 
-            $course_prices = CoursePrice::all();
-            if (count($course_prices)>0) {
-                return response()->json($course_prices);
+            $staff_assigned_courses= StaffAssignedCourse::all();
+            if (count($staff_assigned_courses) > 0) {
+                return response()->json($staff_assigned_courses);
             } else {
                 return response()->json([
                     'message' => "No record found",
@@ -29,19 +26,34 @@ class CoursePriceController extends Controller
         }
     }
 
-
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function create()
     {
         //
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function store(Request $request)
     {
         //
     }
 
-
-    public function show(CoursePrice $coursePrice)
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\StaffAssignedCourse  $StaffAssignedCourse
+     * @return \Illuminate\Http\Response
+     */
+    public function show(StaffAssignedCourse $StaffAssignedCourse)
     {
         //
     }
@@ -49,10 +61,10 @@ class CoursePriceController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\CoursePrice  $coursePrice
+     * @param  \App\Models\StaffAssignedCourse  $StaffAssignedCourse
      * @return \Illuminate\Http\Response
      */
-    public function edit(CoursePrice $coursePrice)
+    public function edit(StaffAssignedCourse $StaffAssignedCourse)
     {
         //
     }
@@ -61,21 +73,19 @@ class CoursePriceController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\CoursePrice  $coursePrice
+     * @param  \App\Models\StaffAssignedCourse  $StaffAssignedCourse
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, CoursePrice $coursePrice)
+    public function update(Request $request, StaffAssignedCourse $StaffAssignedCourse)
     {
         //
     }
-
-
     public function destroy($id)
     {
         try {
-            $course_prices = CoursePrice::find($id);
-            if ($course_prices) {
-                $course_prices->delete();
+            $staff_assigned_courses = StaffAssignedCourse::find($id);
+            if ($staff_assigned_courses) {
+                $staff_assigned_courses->delete();
                 return response()->json([
                     'message' => "Record deleted successfully"
                 ]);

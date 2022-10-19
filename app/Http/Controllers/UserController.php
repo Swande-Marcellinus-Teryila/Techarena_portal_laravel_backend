@@ -2,21 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CoursePrice;
+use App\Models\User;
 use Illuminate\Http\Request;
 
-use function PHPUnit\Framework\isEmpty;
-
-class CoursePriceController extends Controller
+class UserController extends Controller
 {
-
     public function index()
     {
         try {
 
-            $course_prices = CoursePrice::all();
-            if (count($course_prices)>0) {
-                return response()->json($course_prices);
+            $users = User::all();
+            if (count($users) > 0) {
+                return response()->json($users);
             } else {
                 return response()->json([
                     'message' => "No record found",
@@ -29,19 +26,34 @@ class CoursePriceController extends Controller
         }
     }
 
-
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function create()
     {
         //
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function store(Request $request)
     {
         //
     }
 
-
-    public function show(CoursePrice $coursePrice)
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
     {
         //
     }
@@ -49,10 +61,10 @@ class CoursePriceController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\CoursePrice  $coursePrice
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(CoursePrice $coursePrice)
+    public function edit($id)
     {
         //
     }
@@ -61,21 +73,20 @@ class CoursePriceController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\CoursePrice  $coursePrice
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, CoursePrice $coursePrice)
+    public function update(Request $request, $id)
     {
         //
     }
 
-
     public function destroy($id)
     {
         try {
-            $course_prices = CoursePrice::find($id);
-            if ($course_prices) {
-                $course_prices->delete();
+            $users = User::find($id);
+            if ($users) {
+                $users->delete();
                 return response()->json([
                     'message' => "Record deleted successfully"
                 ]);

@@ -7,14 +7,23 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        try {
+
+            $products= Product::all();
+            if (count($products) > 0) {
+                return response()->json($products);
+            } else {
+                return response()->json([
+                    'message' => "No record found",
+                ]);
+            }
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'Sorry, something went wrong',
+            ]);
+        }
     }
 
     /**
@@ -71,15 +80,24 @@ class ProductController extends Controller
     {
         //
     }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(product $product)
+    public function destroy($id)
     {
-        //
+        try {
+            $products = Product::find($id);
+            if ($products) {
+                $products->delete();
+                return response()->json([
+                    'message' => "Record deleted successfully"
+                ]);
+            } else {
+                return response()->json([
+                    'message' => "Record does not exist"
+                ]);
+            }
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => "Sorry,somthing went wrong"
+            ]);
+        }
     }
 }
