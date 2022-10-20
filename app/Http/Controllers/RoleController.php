@@ -35,50 +35,61 @@ class RoleController extends Controller
      */
     public function create()
     {
-        
     }
 
-   
+
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'role_name' => 'required',
-            'role_description' => 'required'
+        $request->validate([
+            'role_name' => 'required'
         ]);
+
         $roles = [
-            'role_name' => $request->role_name,
-            'role_description' => $request->role_description,
+            'role_name'        => $request->role_name,
+            'role_description' => empty($request->role_description) ? ' ' : $request->role_description,
         ];
         $role = $request->role_name;
         try {
-            $count_record =Role::where('role_name','=',$role)->first();
-            if ($count_record == 0) {
-                DB::table('roles')->insert($roles);
+            if (Role::where('role_name', '=', $role)->exists()) {
+
                 return response()->json([
-                    'message' => 'Record added successfully'
-                ]);
-            } else {
-                return response()->json([
-                    'message' => $role.' already exist!'
+                    'message' => $role . ' already exist!'
                 ], 500);
             }
+            Role:: create($roles);
 
+            return response()->json([
+                'message' => 'Record added successfully'
+            ]);
         } catch (\Exception $e) {
             return response()->json([
-                'message' => $role . ' al'
+                'message' => "Sorry, Something went wrong",
             ], 500);
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+  
     public function show($id)
     {
-        //
+        try {
+
+            $data = DB::table('roles')->find($id);
+            if(is_null($data)){
+                return response()->json([
+                    'message' => "Record not found",
+                    'status'  => 404,
+                ],404);
+            }
+            $response['content'] = $data;
+            return response()->json($response);
+
+            
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'Sorry, something went wrong',
+            ],500);
+        }
+        
     }
 
     /**
@@ -92,28 +103,42 @@ class RoleController extends Controller
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
-    {
-        //
+    {   
+        $roles = Role::find($id);
+        $request->validate([
+            'role_name' => 'required'
+        ]);
+
+        
+            
+        $role = $request->role_name;
+        try {
+            if (Role::where('role_name','=', $role)->where('id','!=',$id)->exists()) {
+
+                return response()->json([
+                    'message' => $role . ' already exist!'
+                ], 500);
+            }
+            
+            $roles->role_name        = ucfirst($request->role_name);
+            $roles->role_description = empty($request->role_description) ? ' ' : $request->role_description;
+            $roles->save();
+            return response()->json([
+                'message' => 'Record updated successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => "Sorry, Something went wrong",
+            ], 500);
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+   
     public function destroy($id)
     {
         try {
-            $roles = Role::WhereIn('id',explode(',',$id));
+            $roles = Role::WhereIn('id', explode(',', $id));
             if ($roles) {
                 $roles->delete();
                 return response()->json([
