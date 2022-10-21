@@ -8,4 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class CourseCategory extends Model
 {
     use HasFactory;
+    protected $fillable =[
+        'category_name', 
+    ];
+    public $timestamps = true;
+
+    public function course(){
+        return $this->hasMany(Course::class);
+    }
+    
+
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CourseCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CourseCategoryController extends Controller
 {
@@ -38,26 +39,57 @@ class CourseCategoryController extends Controller
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'category_name' => 'required'
+        ]);
+
+        $course_categories = [
+            'category_name' => $request->category_name,
+        ];
+        $category = $request->category_name;
+        try {
+            if (CourseCategory::where('category_name', '=', $category)->exists()) {
+
+                return response()->json([
+                    'message' => $category . ' already exist!'
+                ], 500);
+            }
+            CourseCategory:: create($course_categories);
+
+            return response()->json([
+                'message' => 'Record added successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => "Sorry, Something went wrong",
+            ], 500);
+        }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\CourseCategory  $courseCategory
-     * @return \Illuminate\Http\Response
-     */
-    public function show(CourseCategory $courseCategory)
+   
+
+    public function show($id)
     {
-        //
+        try {
+
+            $data = DB::table('course_categories')->find($id);
+            if(is_null($data)){
+                return response()->json([
+                    'message' => "Record not found",
+                    'status'  => 404,
+                ],404);
+            }
+            $response['content'] = $data;
+            return response()->json($response);
+
+            
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'Sorry, something went wrong',
+            ],500);
+        }
     }
 
     /**
@@ -71,16 +103,32 @@ class CourseCategoryController extends Controller
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\CourseCategory  $courseCategory
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, CourseCategory $courseCategory)
+  
+    public function update(Request $request,$id)
     {
-        //
+        $course_categories = CourseCategory::find($id);
+        $request->validate([
+            'category_name' => 'required'
+        ]);            
+        $category = $request->category_name;
+        try {
+            if (CourseCategory::where('category_name','=', $category)->where('id','!=',$id)->exists()) {
+
+                return response()->json([
+                    'message' => $category . ' already exist!'
+                ], 500);
+            }
+            
+            $course_categories->category_name    = ucfirst($request->category_name);
+            $course_categories->save();
+            return response()->json([
+                'message' => 'Record updated successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => "Sorry, Something went wrong",
+            ], 500);
+        }
     }
 
 

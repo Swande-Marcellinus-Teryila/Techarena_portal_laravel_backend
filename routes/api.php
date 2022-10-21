@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CourseCategoryController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\CourseDurationController;
 use App\Http\Controllers\CoursePriceController;
@@ -23,6 +24,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::apiResource('users',UserController::class);
+Route::apiResource('course-categories',CourseCategoryController::class);
 Route::apiResource('courses',CourseController::class);
 Route::apiResource('course-prices',CoursePriceController::class);
 Route::apiResource('students',StudentController::class);
