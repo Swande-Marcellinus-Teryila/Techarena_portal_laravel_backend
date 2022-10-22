@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Department;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class DepartmentController extends Controller
 {
@@ -12,7 +13,7 @@ class DepartmentController extends Controller
     {
         try {
 
-            $departments= Department::all();
+            $departments = Department::all();
             if (count($departments) > 0) {
                 return response()->json($departments);
             } else {
@@ -23,7 +24,7 @@ class DepartmentController extends Controller
         } catch (\Throwable $th) {
             return response()->json([
                 'message' => 'Sorry, something went wrong',
-            ]);
+            ], 500);
         }
     }
 
@@ -37,26 +38,56 @@ class DepartmentController extends Controller
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'dept_name' => 'required'
+        ]);
+
+        $departments = [
+            'dept_name'        => $request->dept_name,
+
+        ];
+        $dept = $request->dept_name;
+        try {
+            if (Department::where('dept_name', '=', $dept)->exists()) {
+
+                return response()->json([
+                    'message' => $dept . ' already exist!'
+                ], 500);
+            }
+            Department::create($departments);
+
+            return response()->json([
+                'message' => 'Record added successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => "Sorry, Something went wrong",
+            ], 500);
+        }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Department  $department
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Department $department)
+
+    public function show($id)
     {
-        //
+
+        try {
+
+            $data = DB::table('departments')->find($id);
+            if (is_null($data)) {
+                return response()->json([
+                    'message' => "Record not found",
+                    'status'  => 404,
+                ], 404);
+            }
+            $response['content'] = $data;
+            return response()->json($response);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'Sorry, something went wrong',
+            ], 500);
+        }
     }
 
     /**
@@ -70,32 +101,44 @@ class DepartmentController extends Controller
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Department  $department
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Department $department)
+
+    public function update(Request $request, $id)
     {
-        //
+        $data = Department::find($id);
+        $request->validate([
+            'dept_name' => 'required'
+        ]);
+
+        $department = $request->dept_name;
+        try {
+            if (Department::where('dept_name', '=', $department)->where('id', '!=', $id)->exists()) {
+
+                return response()->json([
+                    'message' => $department . ' already exist!'
+                ], 500);
+            }
+
+            $data->dept_name        = ucfirst($request->dept_name);
+            $data->save();
+            return response()->json([
+                'message' => 'Record updated successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => "Sorry, Something went wrong",
+            ], 500);
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Department  $department
-     * @return \Illuminate\Http\Response
-     */
+
     public function destroy($id)
     {
         try {
-            $departments = Department::find($id);
-            if ($departments) {
-                $departments->delete();
+            $data = Department::WhereIn('id', explode(',', $id));
+            if ($data) {
+                $data->delete();
                 return response()->json([
-                    'message' => "Record deleted successfully"
+                    'message' => "Record(s) deleted successfully"
                 ]);
             } else {
                 return response()->json([

@@ -108,7 +108,9 @@ class RoleController extends Controller
         $roles = Role::find($id);
         $request->validate([
             'role_name' => 'required'
-        ]);            
+        ]);
+
+            
         $role = $request->role_name;
         try {
             if (Role::where('role_name','=', $role)->where('id','!=',$id)->exists()) {
