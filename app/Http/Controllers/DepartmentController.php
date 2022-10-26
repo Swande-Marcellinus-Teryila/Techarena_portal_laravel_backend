@@ -24,7 +24,7 @@ class DepartmentController extends Controller
         } catch (\Throwable $th) {
             return response()->json([
                 'message' => 'Sorry, something went wrong',
-            ], 500);
+            ]);
         }
     }
 
@@ -130,13 +130,12 @@ class DepartmentController extends Controller
         }
     }
 
-
     public function destroy($id)
     {
         try {
-            $data = Department::WhereIn('id', explode(',', $id));
-            if ($data) {
-                $data->delete();
+            $course_categories = Department::WhereIn('id', explode(',', $id));
+            if ($course_categories) {
+                $course_categories->delete();
                 return response()->json([
                     'message' => "Record(s) deleted successfully"
                 ]);
@@ -147,7 +146,7 @@ class DepartmentController extends Controller
             }
         } catch (\Throwable $th) {
             return response()->json([
-                'message' => "Sorry,somthing went wrong"
+                'message' => "Sorry,something went wrong"
             ]);
         }
     }

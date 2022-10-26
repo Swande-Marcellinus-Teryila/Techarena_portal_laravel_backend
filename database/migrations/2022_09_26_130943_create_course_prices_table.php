@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('course_prices', function (Blueprint $table) {
             $table->id();
-            $table->integer('cost');
+            $table->bigInteger('cost');
             $table->foreignId('department_id')->constrained()->onDelete('cascade');
             $table->foreignId('course_id')->constrained()->onDelete('cascade');
             $table->timestamps();

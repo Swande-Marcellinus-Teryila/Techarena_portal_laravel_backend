@@ -148,7 +148,7 @@ class CourseCategoryController extends Controller
             }
         } catch (\Throwable $th) {
             return response()->json([
-                'message' => "Sorry,somthing went wrong"
+                'message' => "Sorry,something went wrong"
             ]);
         }
     }
