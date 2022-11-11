@@ -12,6 +12,7 @@ use App\Http\Controllers\ScholarshipStudentController;
 use App\Http\Controllers\StaffAssignedCourseController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\UserController;
+use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -35,5 +36,6 @@ Route::apiResource('course-durations',CourseDurationController::class);
 Route::apiResource('roles',RoleController::class);
 Route::apiResource('scholarship-courses',ScholarshipCourseController::class);
 Route::apiResource('scholarships',ScholarshipController::class);
+Route::get('students/{id}/{status}/{targetc}',[StudentController::class,'statusSetter']);
 
 

@@ -22,6 +22,7 @@ class Student extends Model
         'guidiance_address',
         'guidiance_email',
         'guidiance_phone',
+        'course_id',
         'department_id',
         'sex_id',
         'marital_status_id',
@@ -39,6 +40,9 @@ class Student extends Model
         
         function scholarshipCourse(){
             return $this->belongsTo(scholarshipCourse::class);
+        }
+        function course(){
+            return $this->belongsTo(Course::class);
         }
 
         function department(){

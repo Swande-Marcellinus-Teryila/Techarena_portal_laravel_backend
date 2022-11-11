@@ -22,13 +22,14 @@ return new class extends Migration
             $table->string('phone');
             $table->string('whatsapp_no');
             $table->string('email');
-            $table->integer('residential_address');
+            $table->string('residential_address');
             $table->string('pri_sch_attended');
             $table->string('sec_sch_attended');
             $table->string('guidiance_name');
             $table->string('guidiance_address');
             $table->string('guidiance_email');
             $table->string('guidiance_phone');
+            $table->foreignId('course_id')->constrained();
             $table->foreignId('department_id')->constrained();
             $table->foreignId('course_duration_id')->constrained();
             $table->foreignId('sex_id')->constrained();
